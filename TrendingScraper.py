@@ -1,12 +1,7 @@
-
 """" 
 Todo:
-
 - git REPO
 - update channel
-
-
-
 """
 # Imports
 import requests
@@ -24,7 +19,7 @@ class RiseScraper():
 
 		#Handle Page? handles contents of website?
 		page = requests.get(url)
-
+		self.spLimit = 100
 		# Store contents of website under doc
 		doc = lh.fromstring(page.content)
 		self.tr_elements = doc.xpath('//tr')
@@ -34,7 +29,6 @@ class RiseScraper():
 	# This function converts needed information from html file to 3 lists
 	def toList(self):
 
-		self.change = []
 		self.price = []
 		self.symbols = []
 
@@ -53,7 +47,7 @@ class RiseScraper():
 				col.append((name))
 			self.symbols.append(col[0])
 			col=[]
-		print(self.symbols)
+		#print(self.symbols)
 
 
 		# Loop that stores price in a list
@@ -64,18 +58,41 @@ class RiseScraper():
 								# '2' = price
 			self.price.append(col[2])
 			col=[]
-		print(self.price)
+		#print(self.price)
+		self.ctr = 1
+		self.toFloat()
+		self.price = self.nPrice
+		self.symbols = self.nSymbol
+		self.filterPrice()
+		self.price = self.nPrice
+		self.symbols = self.nSymbol
 
-		# Loop for saving % change in a list
-		for i in range(1, len(self.tr_elements),1):
-			for	t in self.tr_elements[i]:
-				name=t.text_content()
-				col.append((name))
-									#'4' = %change
-			self.change.append(col[4])
-			col=[]
-		print(self.change)
+	def toFloat(self):
+		self.nPrice = []
+		self.nSymbol = []
+		for i in range(0, len(self.price)-(self.ctr),1):
+			#print(i)
+			try:
+				float(self.price[i])
+			except ValueError:
+				self.price.remove(self.price[i])
+				self.ctr += 1
+				self.toFloat()
+				
+				pass
+			self.nPrice.append(float(self.price[i]))
+			self.nSymbol.append(self.symbols[i])
 
+
+	def filterPrice(self):	
+		self.nPrice = []
+		self.nSymbol = []
+		for i in range(0,len(self.price),1):
+			
+			if self.price[i] <= float(self.spLimit/10):
+				self.nPrice.append(self.price[i])
+				self.nSymbol.append(self.symbols[i])
+		#print(self.nPrice)
 
 
 RiseScraper()
