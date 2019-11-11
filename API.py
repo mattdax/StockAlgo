@@ -90,4 +90,3 @@ class StockAPI():
 
 	def checkIndex(self):
 		pass
-#StockAPI()
