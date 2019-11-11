@@ -53,7 +53,7 @@ class RiseScraper():
 			col=[]
 		
 
-		self.ctr = 1
+		self.ctr = 2
 		# Converts dats in lists to float
 		self.toFloat()
 		self.price = self.nPrice
@@ -70,12 +70,11 @@ class RiseScraper():
 		for i in range(0, len(self.price)-(self.ctr),1):
 			try:
 				float(self.price[i])
-			except ValueError:
+			except (ValueError):
 				self.price.remove(self.price[i])
 				self.ctr += 1
-				self.toFloat()
-				
-				pass
+				#self.toFloat()
+
 			self.nPrice.append(float(self.price[i]))
 			self.nSymbol.append(self.symbols[i])
 

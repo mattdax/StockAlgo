@@ -1,4 +1,3 @@
-
 import API
 
 class Williams():
@@ -9,15 +8,16 @@ class Williams():
 		self.Whigh = self.info[1]
 		self.Wlow = self.info[2]
 		self.Symbol = self.info[3]
+		print(self.Symbol)
 		print(self.Cprice)
-		print(self.Whigh)
+		print(len(self.Whigh))
 		print(self.Wlow)
 		self.williams = []
 		self.calc()
 	def calc(self):
-		for i in range(0,len(self.Symbol),1):
+		for i in range(0,len(self.Symbol)-1,1):
 			try:
-				r = ((self.Whigh[i]-self.Cprice[i])/(self.Whigh[i]-self.Wlow[i]))*-100
+				r = ((self.Whigh[i]-self.Cprice[i])/(self.Whigh[i]-self.Wlow[i])*-100)
 				self.williams.append(r)
 			except ZeroDivisionError:
 				 self.williams.append(float(0))
