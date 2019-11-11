@@ -11,7 +11,9 @@ class StockAPI():
 		self.Cprice = []
 		self.Whigh = []
 		self.Wlow = []
+		
 		self.symbols = TS.RiseScraper().symbols
+		self.info = [self.Cprice, self.Whigh, self.Wlow, self.symbols]
 		self.loopPull()
 	
 	def loopPull(self):
@@ -20,7 +22,8 @@ class StockAPI():
 		for i in range(0,len(self.symbols),1):
 			self.ctr += 1
 			self.pull()
-
+		print("here")
+		return
 	def pull(self):
 
 		# URL used to search
@@ -35,7 +38,7 @@ class StockAPI():
 
 		# Adds Wlow, Whigh, Cprice from web data to list and converts to float
 		self.Cprice.append(float(tr_elements[0][0][4].text_content()))
-		self.Whigh.append(float(tr_elements[0][7][2].text_content()))
-		self.Wlow.append(float(tr_elements[0][7][3].text_content()))
-StockAPI()
+		self.Whigh.append(float(tr_elements[0][14][2].text_content()))
+		self.Wlow.append(float(tr_elements[0][14][3].text_content()))
+#StockAPI()
 		
