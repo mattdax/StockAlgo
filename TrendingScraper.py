@@ -1,15 +1,14 @@
-"""" 
-Todo:
-- git REPO
-- update channel
-"""
 # Imports
 import requests
 import lxml.html as lh # What is this
 import pandas as pd
 
 
+"""
+CLASS PURPOSE:
 
+Pulls stock symbols from Yahoo and filters out stock by price of funds available. 
+"""
 class RiseScraper():
 	
 	def __init__(self):
@@ -20,26 +19,22 @@ class RiseScraper():
 		#Handle Page? handles contents of website?
 		page = requests.get(url)
 		self.spLimit = 100
+		
 		# Store contents of website under doc
 		doc = lh.fromstring(page.content)
 		self.tr_elements = doc.xpath('//tr')
 		self.toList()
 	
-
 	# This function converts needed information from html file to 3 lists
 	def toList(self):
 
+		# Empty
 		self.price = []
 		self.symbols = []
 
-		for t in self.tr_elements:
-			break
-
-
 		#Create empty list
 		col=[]
-		i=0
-		
+		i=0	
 		# Loop that stores symbols in a list
 		for i in range(1, len(self.tr_elements),1):
 			for	t in self.tr_elements[i]:
@@ -47,8 +42,6 @@ class RiseScraper():
 				col.append((name))
 			self.symbols.append(col[0])
 			col=[]
-		#print(self.symbols)
-
 
 		# Loop that stores price in a list
 		for i in range(1, len(self.tr_elements),1):
@@ -58,11 +51,15 @@ class RiseScraper():
 								# '2' = price
 			self.price.append(col[2])
 			col=[]
-		#print(self.price)
+		
+
 		self.ctr = 1
+		# Converts dats in lists to float
 		self.toFloat()
 		self.price = self.nPrice
 		self.symbols = self.nSymbol
+		
+		# Filter's out the set price of funds available
 		self.filterPrice()
 		self.price = self.nPrice
 		self.symbols = self.nSymbol
@@ -71,7 +68,6 @@ class RiseScraper():
 		self.nPrice = []
 		self.nSymbol = []
 		for i in range(0, len(self.price)-(self.ctr),1):
-			#print(i)
 			try:
 				float(self.price[i])
 			except ValueError:
@@ -92,7 +88,6 @@ class RiseScraper():
 			if self.price[i] <= float(self.spLimit/10):
 				self.nPrice.append(self.price[i])
 				self.nSymbol.append(self.symbols[i])
-		#print(self.nPrice)
 
-
+# Call main
 RiseScraper()
