@@ -9,4 +9,3 @@ def getPrice(x):
 	tr_elements = doc.xpath('//tbody')
 	#print(tr_elements.text_content())
 	return (float(tr_elements[0][0][4].text_content()))
-print(getPrice("GE"))
