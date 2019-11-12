@@ -45,11 +45,11 @@ class Simulator():
 	def buy(self):
 
 		current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-		parent_dir = os.path.dirname(current_dir)
+		self.parent_dir = os.path.dirname(current_dir)
 		sys.path.insert(0, parent_dir) 
 		
 		file = "\\Data\\accounts.txt"
-		self.path = parent_dir+file
+		self.path = self.parent_dir+file
 
 		account = open(self.path,'w')
 		for i in range(0, len(self.Sprice), 1):
@@ -69,14 +69,28 @@ class Simulator():
 				line = account.readline()
 				self.load.append(line)
 			account.close()
+		
 		with open(self.path ,'r+') as delete:
-			d = delete.readlines()
-			delete.seek(0)
-			for i in d:
-				if i[0:2] != (self.toSell[0])[0:2]:
-					delete.write(i)
-			delete.truncate()
-
-		print(self.load)
+			for i in range(0, len(self.toSell),1):
+				d = delete.readlines()
+				delete.seek(0)
+				for i in d:
+					if i[0:len(self.toSell)] != (self.toSell[0])[0:len(self.toSell)]:
+						delete.write(i)
+				delete.truncate()
+		file = "\\Models\\balance.txt"
+		path = self.parent_dir+file
+		with open(path, "r") as balance:
+			self.balance = int(balance.readline())
+			balance.close()
+		for i in range(0, len(self.load),1):
+			for z in range(0, len(self.load[i]),1):
+				try:
+					int(self.load[i][z])
+					p = i 
+				except ValueError:
+					pass
+			for x in range(0, len(self.load[i][x:]))
+				if self.load[i]
 		account.close()
-Simulator().buy()
+Simulator().sell()
