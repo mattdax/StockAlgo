@@ -10,7 +10,11 @@
 import requests
 import lxml.html as lh # What is this
 import pandas as pd
-
+import os, sys, inspect
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir) 
+import balance
 
 """
 CLASS PURPOSE:
@@ -26,8 +30,8 @@ class RiseScraper():
 
 		#Handle Page? handles contents of website?
 		page = requests.get(url)
-		self.spLimit = 100
-		
+		self.spLimit = balance.Balance().balance
+		print(self.spLimit)
 		# Store contents of website under doc
 		doc = lh.fromstring(page.content)
 		self.tr_elements = doc.xpath('//tr')
@@ -95,6 +99,3 @@ class RiseScraper():
 			if self.price[i] <= float(self.spLimit/10):
 				self.nPrice.append(self.price[i])
 				self.nSymbol.append(self.symbols[i])
-
-# Call main
-RiseScraper()
