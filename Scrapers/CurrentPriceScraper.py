@@ -1,3 +1,8 @@
+"""
+ TODO
+- figure out how to call functions from different folders
+-  comment
+"""
 import requests
 import lxml.html as lh
 def getPrice(x):

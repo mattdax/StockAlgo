@@ -1,3 +1,11 @@
+
+"""
+ - Finish comments
+ - Clean up
+ - add redundency
+ - Create new list with different stock names
+"""
+
 # Imports
 import requests
 import lxml.html as lh # What is this

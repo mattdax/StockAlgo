@@ -1,3 +1,9 @@
+"""
+TODO
+
+- Comment
+- figure out why all symbols are not being taken
+"""
 import API
 
 class Williams():
