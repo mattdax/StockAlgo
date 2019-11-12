@@ -23,9 +23,14 @@ class Williams():
 		self.williams = []
 		self.sell = []
 		self.buy = []
+		print(len(self.Symbol))
+		print(len(self.Whigh))
+		print(len(self.Cprice))
 		self.calcInd()
+	
 	def calcInd(self):
 		for i in range(0,len(self.Symbol)-1,1):
+			print(i)
 			try:
 				r = ((self.Whigh[i]-self.Cprice[i])/(self.Whigh[i]-self.Wlow[i])*-100)
 				self.williams.append(r)

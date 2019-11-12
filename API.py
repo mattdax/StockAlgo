@@ -69,15 +69,6 @@ class StockAPI():
 		self.tempL =float(str(self.tr_elements[0][0][3].text_content()).replace(',', ''))
 		
 		for i in range(0, self.daysBack, 1):
-			try:
-				if float(str(self.tr_elements[0][i][2].text_content()).replace(',', '')) >= float(self.tempH):
-					self.tempH = str(self.tr_elements[0][i][2].text_content()).replace(',', '')
-				if float(str(self.tr_elements[0][i][3].text_content()).replace(',', '')) <= float(self.tempL):
-					self.tempL = str(self.tr_elements[0][i][3].text_content()).replace(',', '')
-			except IndexError:
-				self.daysBack += 1
-				pass
-
 			
 			self.tempL = float(str(self.tempL))
 			self.tempH = float(self.tempH)
@@ -87,11 +78,9 @@ class StockAPI():
 	def removeExtra(self):
 		self.WLT = []
 		self.WHT = []
-		for z in range(0, len(self.Whigh)-self.daysBack, int(self.daysBack)):
+		for z in range(0, len(self.Whigh), int(self.daysBack)):
 			self.WLT.append(self.Wlow[0+z])
 			self.WHT.append(self.Whigh[0+z])
-		self.Whigh = self.WHT
-		self.Wlow = self.WLT
 
 	def checkIndex(self):
 		pass
