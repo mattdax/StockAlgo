@@ -90,7 +90,6 @@ class StockAPI():
 		for z in range(0, len(self.Whigh)-self.daysBack, int(self.daysBack)):
 			self.WLT.append(self.Wlow[0+z])
 			self.WHT.append(self.Whigh[0+z])
-		print(self.WLT)
 		self.Whigh = self.WHT
 		self.Wlow = self.WLT
 

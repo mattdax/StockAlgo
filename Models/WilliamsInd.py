@@ -20,14 +20,26 @@ class Williams():
 		self.Wlow = self.info[2]
 		self.Symbol = self.info[3]
 		self.williams = []
-		self.calc()
-	def calc(self):
+		self.sell = []
+		self.buy = []
+		self.calcInd()
+	def calcInd(self):
 		for i in range(0,len(self.Symbol)-1,1):
 			try:
 				r = ((self.Whigh[i]-self.Cprice[i])/(self.Whigh[i]-self.Wlow[i])*-100)
 				self.williams.append(r)
 			except ZeroDivisionError:
 				 self.williams.append(float(0))
-		print(self.williams)
+		self.FilterInd()
+	
+	def FilterInd(self):
+		for i in range(0, len(self.williams),1):
+			if self.williams[i] > -20:
+				self.sell.append(self.Symbol[i])
+			if self.williams[i] < -80:
+				self.buy.append(self.Symbol[i])
+		print(self.sell, self.buy)
+
+
 
 Williams()
