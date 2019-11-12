@@ -1,6 +1,12 @@
+"""
+- comments
+- make sure this cannot be broken
+- clearn up
+"""
 from alpha_vantage.timeseries import TimeSeries
 import pandas as pd
-import TrendingScraper as TS
+from Scrapers import TrendingScraper as TS
+#import TrendingScraper as TS
 import requests
 import lxml.html as lh
 

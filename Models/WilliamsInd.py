@@ -4,6 +4,11 @@ TODO
 - Comment
 - figure out why all symbols are not being taken
 """
+
+import os,sys,inspect
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir) 
 import API
 
 class Williams():
@@ -14,10 +19,6 @@ class Williams():
 		self.Whigh = self.info[1]
 		self.Wlow = self.info[2]
 		self.Symbol = self.info[3]
-		print(self.Symbol)
-		print(self.Cprice)
-		print(len(self.Whigh))
-		print(self.Wlow)
 		self.williams = []
 		self.calc()
 	def calc(self):
