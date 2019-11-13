@@ -25,6 +25,7 @@ class JsonTesting():
 		
 		"Cprice" : Cprice
 		}
+		
 		with open('accounts.json',"r+") as account:
 			words = json.loads(account.read())
 			stock = json.loads(stock.read())
