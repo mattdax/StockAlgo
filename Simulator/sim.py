@@ -7,19 +7,27 @@ TODO
 - comment
 """
 
+# Import Statements
 import sys 
 import requests
 import lxml.html as lh
 import os, sys, inspect
 
+# Change Path
 sys.path.insert(1, '/StockAlgo/Scrapers') 
+
 
 class Simulator():
 	
 	def __init__(self):
+		# Stores stocks to be sold
 		self.Ssym = ['GE']
+		# Price of the strocks
 		self.Sprice = []
+		# Number of stocks to be sold/bought
 		self.Svolume = [6]
+		
+
 		self.loopPrice()
 
 	def loopPrice(self):
@@ -46,7 +54,7 @@ class Simulator():
 
 		current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 		self.parent_dir = os.path.dirname(current_dir)
-		sys.path.insert(0, parent_dir) 
+		sys.path.insert(0, self.parent_dir) 
 		
 		file = "\\Data\\accounts.txt"
 		self.path = self.parent_dir+file
