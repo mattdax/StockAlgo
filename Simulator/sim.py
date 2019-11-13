@@ -11,7 +11,11 @@ TODO
 import sys 
 import requests
 import lxml.html as lh
-import os, sys, inspect
+import os, sys, inspect, json
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir) 
+import balance
 
 # Change Path
 sys.path.insert(1, '/StockAlgo/Scrapers') 
@@ -86,11 +90,8 @@ class Simulator():
 					if i[0:len(self.toSell)] != (self.toSell[0])[0:len(self.toSell)]:
 						delete.write(i)
 				delete.truncate()
-		file = "\\Models\\balance.txt"
-		path = self.parent_dir+file
-		with open(path, "r") as balance:
-			self.balance = int(balance.readline())
-			balance.close()
+		
+		self.balance = balance.Balance().balance
 		for i in range(0, len(self.load),1):
 			for z in range(0, len(self.load[i]),1):
 				try:

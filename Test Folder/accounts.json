@@ -1,0 +1,14 @@
+{
+
+	"stocks": [
+
+				{
+			"sym": "APPL",
+			"Cprice" : 33.3,
+			"Bprice ": 25.5,
+			"vol" : 6
+
+			}
+	]
+
+}
