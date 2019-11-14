@@ -8,32 +8,38 @@ from Scrapers import CurrentPriceScraper as CPS
 
 class SMA():
 	def __init__(self):
-		self.stock = "GE"
+		self.stocks = ['GE']
 		self.period = 50
-		self.SMA = []
-		self.pullData()
+		self.SMA = [[]]
+		self.loopPull()
+	def loopPull(self):
+		for i in range(0, len(self.stocks),1):
+			self.temp = self.stocks[i]
+			self.numTemp = i
+			self.pullData()
+
 	def pullData(self):
-		url = 'https://finance.yahoo.com/quote/'+ self.stock + '/history?p='+ self.stock +'&.tsrc=fin-srch'
+		url = 'https://finance.yahoo.com/quote/'+ self.temp + '/history?p='+ self.temp +'&.tsrc=fin-srch'
 		page = requests.get(url)
 		
 
 		doc = lh.fromstring(page.content)
 		tr_elements = doc.xpath('//tbody')
-		self.ctr = 0
+		
 		for i in range(0, self.period, 1):
-			self.temp = []
-			for x in range(0, self.period+self.ctr, 1):
+			self.tempTwo = []
+			for x in range(0, self.period, 1):
 				print(x+i)
 				try:
-					self.temp.append(tr_elements[0][x+i][4].text_content())
+					self.tempTwo.append(tr_elements[0][x+i][4].text_content())
 				except IndexError:
-					#self.ctr += 1 
 					pass
 			self.calc()
 	def calc(self):
 		sum = 0
-		for z in range(0, len(self.temp),1):
-			sum += float(self.temp[z])
-		self.SMA.append(int(sum)/int(self.period))
+		for z in range(0, len(self.tempTwo),1):
+			sum += float(self.tempTwo[z])
 
+		self.SMA[self.numTemp].append(int(sum)/int(self.period))
+		print(self.SMA)
 SMA()
