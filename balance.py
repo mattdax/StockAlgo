@@ -1,5 +1,5 @@
 # Import Statements
-import os, sys, inspect, json
+import os, sys, inspect, json, csv
 
 
 # Pulls balance from 'balance.txt'
@@ -20,15 +20,17 @@ class Balance():
 		sys.path.insert(0, self.parent_dir) 
 		
 		# FROM MODELS FOLDER 
-		file = "\\StockAlgo\\Data\\balance.json"
+		file = "\\StockAlgo\\Data\\balance.csv"
 		
 		
 
 		paths = self.parent_dir+file
 
 		# Opens file and reads the balance 
-		with open(paths,"r") as balance:
-			
-			self.balance = int((json.loads(balance.read())['balance']))
+		with open(paths) as balance:
+			x = csv.reader(balance, delimiter=',')
+			for row in balance:
+
+				self.balance = int(row[0])
 			balance.close()
 Balance()

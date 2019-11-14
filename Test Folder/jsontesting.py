@@ -1,15 +1,28 @@
 import json
-
+import csv
 class JsonTesting():
 
 	def __init__(self):
 		self.main()
-		self.write()
+		#self.write()
 	def main(self):
-		with open('accounts.json','r') as account:	
-			words = (json.loads(account.read()))
-		#print((words['stocks']))
-		#words.close()
+		"""
+		with open('accounts.csv','a') as account:	
+			# How to write 
+			writer = csv.writer(account, delimiter= ',',quotechar = '"')
+			s = ["TD",23,54,9]
+			writer.writerow(s)
+			
+			"""
+			"""
+		with open('accounts.csv','r') as account:
+			reader = csv.reader(account,delimiter = ',')
+			for row in reader:
+				print(row[0])
+		
+"""
+
+
 	def write(self):
 		sym = 'GE'
 		Cprice = 33.3
@@ -25,11 +38,11 @@ class JsonTesting():
 		
 		"Cprice" : Cprice
 		}
-		
-		with open('accounts.json',"r+") as account:
-			words = json.loads(account.read())
-			stock = json.loads(stock.read())
+
+		with open('accounts.json',"a+") as account:
+			words = json.loads(account)
+			entry = {}
+
 			json.dump(stock, words)
 			#account.close()
-		#print(words)
 JsonTesting()
