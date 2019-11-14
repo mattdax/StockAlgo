@@ -43,8 +43,7 @@ class Simulator():
 			self.ctr += 1
 			self.getPrice()
 		self.getCprice()
-		#self.buy()
-		
+		self.buy()
 		self.sell()
 
 	def getPrice(self):
@@ -77,27 +76,66 @@ class Simulator():
 				s = [str(self.Ssym[i]),str(self.Sprice[i]),str(self.Cprice[i]),str(self.Svolume[i])]
 				writer.writerow(s)
 
-		
-
 
 	def sell(self):
 		# Stock to sell
 		self.load = ['GE']
+		self.SellSym = []
 		self.SellVol = []
 
+
 		# Removes stock that is being sold from csv
-		for i in range(0,len(self.load),1):
-			with open(self.path, 'r') as inp, open(self.parent_dir+'\\Data\\accountsTmp.csv','a') as out:
-				writer = csv.writer(out)
-				for row in csv.reader(inp):
-					print("here")
-					print(row[0])
-					if row[0] != self.load[i]:
-						print('yes')
-						writer.writerow(row)
+		#self.ctrTwo = -1
+		if len(self.load) > 1:
+			for i in range(0,len(self.load),1):
+				with open(self.path, 'r') as inp, open(self.parent_dir+'\\Data\\accountsTmp.csv','a+') as out:
+					#i = i -self.ctrTwo
+					print(i)
+					#i = i + 1
+					writer = csv.writer(out)
+					try:
+						for row in csv.reader(inp, delimiter=','):
+							if row[0] != str(self.load[0]):
+								writer.writerow(row)
+							else:
+								self.SellVol.append(int(row[3]))
+								self.SellSym.append(row[0])
+				
+					except IndexError:
+						pass
+					self.ctr -= 1
+		else:
+			with open(self.path, 'r') as inp, open(self.parent_dir+'\\Data\\accountsTmp.csv','a+') as out:
+					#print(i)
+					writer = csv.writer(out)
+					try:
+						for row in csv.reader(inp, delimiter=','):
+							if row[0] != str(self.load[0]):
+								
+								writer.writerow(row)
+							else:
+								self.SellVol.append(int(row[3]))
+								self.SellSym.append(row[0])
+				
+					except IndexError:
+						pass
+
+
+		# Eeases main CSV file 
 		erase = open(self.path, 'a')
 		erase.close()
-		
+		for i in range(0, len(self.SellVol),1):
+			
+			balanceNew  = balance.Balance().balance
+			print(balanceNew)
+			d = int(self.SellVol[i])
+			e = int(CPS.getprice(self.SellSym[i]))
+			price  = d + e + int(balanceNew)
+			print(price)
+			(CPS.writeBalance((price)))
+
+
+			# Re writes to main from temp accounts pages
 		data = self.parent_dir +'\\Data\\accountsTmp.csv'
 		# Replaces csv file from temp
 		with open(self.path, 'w') as account:
@@ -106,5 +144,4 @@ class Simulator():
 				reader = csv.reader(write,delimiter = ',')
 				for row in reader:
 					writer.writerow(row)
-
 Simulator()

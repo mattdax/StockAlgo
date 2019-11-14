@@ -22,15 +22,13 @@ class Balance():
 		# FROM MODELS FOLDER 
 		file = "\\StockAlgo\\Data\\balance.csv"
 		
-		
 
 		paths = self.parent_dir+file
 
 		# Opens file and reads the balance 
-		with open(paths) as balance:
+		with open(paths, 'r') as balance:
 			x = csv.reader(balance, delimiter=',')
 			for row in balance:
-
 				self.balance = int(row[0])
-			balance.close()
-Balance()
+		
+#Balance()
