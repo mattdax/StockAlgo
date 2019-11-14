@@ -12,12 +12,15 @@ class SMA():
 		self.period = 50
 		self.SMA = [[]]
 		self.loopPull()
+	
+	# Loops which stock data is currently being pulled from 
 	def loopPull(self):
 		for i in range(0, len(self.stocks),1):
 			self.temp = self.stocks[i]
 			self.numTemp = i
 			self.pullData()
 
+	# Pulls the data from the internet per stock
 	def pullData(self):
 		url = 'https://finance.yahoo.com/quote/'+ self.temp + '/history?p='+ self.temp +'&.tsrc=fin-srch'
 		page = requests.get(url)
@@ -29,17 +32,16 @@ class SMA():
 		for i in range(0, self.period, 1):
 			self.tempTwo = []
 			for x in range(0, self.period, 1):
-				print(x+i)
 				try:
 					self.tempTwo.append(tr_elements[0][x+i][4].text_content())
 				except IndexError:
 					pass
 			self.calc()
+	# Function that calculates SMA 
 	def calc(self):
 		sum = 0
 		for z in range(0, len(self.tempTwo),1):
 			sum += float(self.tempTwo[z])
 
 		self.SMA[self.numTemp].append(int(sum)/int(self.period))
-		print(self.SMA)
-SMA()
+		
