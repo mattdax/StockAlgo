@@ -27,8 +27,6 @@ class Balance():
 
 		# Opens file and reads the balance 
 		with open(paths, 'r') as balance:
-			x = csv.reader(balance, delimiter=',')
-			for row in balance:
-				self.balance = int(row[0])
+			x = csv.reader(balance)
+			self.balance = int(next(x)[0])
 		
-#Balance()

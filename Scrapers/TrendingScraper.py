@@ -1,4 +1,4 @@
-
+ 
 """
  - Finish comments
  - Clean up
@@ -32,6 +32,7 @@ class RiseScraper():
 		page = requests.get(url)
 		self.spLimit = balance.Balance().balance
 		print(self.spLimit)
+		
 		# Store contents of website under doc
 		doc = lh.fromstring(page.content)
 		self.tr_elements = doc.xpath('//tr')

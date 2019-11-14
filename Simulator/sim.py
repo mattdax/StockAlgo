@@ -75,6 +75,12 @@ class Simulator():
 				writer = csv.writer(account, delimiter= ',',quotechar = '"')
 				s = [str(self.Ssym[i]),str(self.Sprice[i]),str(self.Cprice[i]),str(self.Svolume[i])]
 				writer.writerow(s)
+				balanceNew  = balance.Balance().balance
+				d = int(self.Svolume[i])
+				e = int(CPS.getprice(self.Ssym[i]))
+				price  = int(balanceNew)-d-e
+				(CPS.writeBalance((price)))
+
 
 
 	def sell(self):
@@ -127,11 +133,9 @@ class Simulator():
 		for i in range(0, len(self.SellVol),1):
 			
 			balanceNew  = balance.Balance().balance
-			print(balanceNew)
 			d = int(self.SellVol[i])
 			e = int(CPS.getprice(self.SellSym[i]))
 			price  = d + e + int(balanceNew)
-			print(price)
 			(CPS.writeBalance((price)))
 
 
