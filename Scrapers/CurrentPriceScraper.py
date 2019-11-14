@@ -5,7 +5,7 @@
 """
 import requests
 import lxml.html as lh
-def getPrice(x):
+def getprice(x):
 	url = 'https://finance.yahoo.com/quote/'+ x + '/history?p='+ x +'&.tsrc=fin-srch'
 	page = requests.get(url)
 	#self.spLimit = 100

@@ -11,8 +11,12 @@ TODO
 import sys 
 import requests
 import lxml.html as lh
-import os, sys, inspect
-
+import os, sys, inspect, csv
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir) 
+import balance
+from Scrapers import CurrentPriceScraper as CPS
 # Change Path
 sys.path.insert(1, '/StockAlgo/Scrapers') 
 
@@ -26,8 +30,11 @@ class Simulator():
 		self.Sprice = []
 		# Number of stocks to be sold/bought
 		self.Svolume = [6]
-		
-
+		self.Cprice = []
+		current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+		self.parent_dir = os.path.dirname(current_dir)
+		self.file = "\\Data\\accounts.csv"
+		self.path = self.parent_dir+self.file
 		self.loopPrice()
 
 	def loopPrice(self):
@@ -35,7 +42,9 @@ class Simulator():
 		for i in range(0, len(self.Ssym),1):
 			self.ctr += 1
 			self.getPrice()
-		self.buy()
+		self.getCprice()
+		#self.buy()
+		
 		self.sell()
 
 	def getPrice(self):
@@ -49,56 +58,53 @@ class Simulator():
 		tr_elements = doc.xpath('//tbody')
 		
 		self.Sprice.append(float(tr_elements[0][0][4].text_content())) 
+
+	# Function that adds current price of stock to a list. 
+	def getCprice(self):
+			for i in range(0, len(self.Ssym),1):
+				self.Cprice.append(CPS.getprice(self.Ssym[i]))
 	
 	def buy(self):
 
-		current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-		self.parent_dir = os.path.dirname(current_dir)
+		
 		sys.path.insert(0, self.parent_dir) 
 		
-		file = "\\Data\\accounts.txt"
-		self.path = self.parent_dir+file
+		
 
-		account = open(self.path,'w')
 		for i in range(0, len(self.Sprice), 1):
-			
-			account.write(str(self.Ssym[i]+str(self.Sprice[i])+":"+str(self.Svolume[i])))
-		account.close()
+			with  open(self.path,'a') as account:
+				writer = csv.writer(account, delimiter= ',',quotechar = '"')
+				s = [str(self.Ssym[i]),str(self.Sprice[i]),str(self.Cprice[i]),str(self.Svolume[i])]
+				writer.writerow(s)
+
+		
 
 
 	def sell(self):
-		self.load = []
-		self.toSell = ['GE']
+		# Stock to sell
+		self.load = ['GE']
+		self.SellVol = []
+
+		# Removes stock that is being sold from csv
+		for i in range(0,len(self.load),1):
+			with open(self.path, 'r') as inp, open(self.parent_dir+'\\Data\\accountsTmp.csv','a') as out:
+				writer = csv.writer(out)
+				for row in csv.reader(inp):
+					print("here")
+					print(row[0])
+					if row[0] != self.load[i]:
+						print('yes')
+						writer.writerow(row)
+		erase = open(self.path, 'a')
+		erase.close()
 		
-		with open(self.path, 'r') as account:
-			line = account.readline()
-			self.load.append(line)
-			while line:
-				line = account.readline()
-				self.load.append(line)
-			account.close()
-		
-		with open(self.path ,'r+') as delete:
-			for i in range(0, len(self.toSell),1):
-				d = delete.readlines()
-				delete.seek(0)
-				for i in d:
-					if i[0:len(self.toSell)] != (self.toSell[0])[0:len(self.toSell)]:
-						delete.write(i)
-				delete.truncate()
-		file = "\\Models\\balance.txt"
-		path = self.parent_dir+file
-		with open(path, "r") as balance:
-			self.balance = int(balance.readline())
-			balance.close()
-		for i in range(0, len(self.load),1):
-			for z in range(0, len(self.load[i]),1):
-				try:
-					int(self.load[i][z])
-					p = i 
-				except ValueError:
-					pass
-			for x in range(0, len(self.load[i][x:]))
-				if self.load[i]
-		account.close()
-Simulator().sell()
+		data = self.parent_dir +'\\Data\\accountsTmp.csv'
+		# Replaces csv file from temp
+		with open(self.path, 'w') as account:
+			writer = csv.writer(account, delimiter = ',',quotechar = '"')
+			with open(data, 'r') as write:
+				reader = csv.reader(write,delimiter = ',')
+				for row in reader:
+					writer.writerow(row)
+
+Simulator()

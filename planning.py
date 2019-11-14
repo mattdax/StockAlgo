@@ -35,4 +35,23 @@ Thread - Looking for stocks
 Thread - Tracking my holdings
 LinkSlumps: like EBIT, revenue, sector, stock ticker, stock name, etc
 
+
+
+{
+
+	"stocks": [
+
+				{
+			"sym": "APPL",
+			"Cprice" : 33.3,
+			"Bprice ": 25.5,
+			"vol" : 6
+
+			}
+	]
+
+}
+
+
+
 """
