@@ -45,8 +45,8 @@ class SMA():
 	def calc(self):
 		sum = 0
 		for z in range(0, len(self.tempTwo),1):
-		
-			self.SMA[self.numTemp].append(int(sum)/int(self.period))
+			sum+= float(self.tempTwo[z])
+		self.SMA[self.numTemp].append(int(sum)/int(self.period))
 		
 		try:
 			high = float(self.tr_elements[0][self.i][1].text_content())

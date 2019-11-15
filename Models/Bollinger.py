@@ -18,6 +18,7 @@ class Bollinger():
 		self.info = SMA.SMA().info
 		self.SMA = self.info[0]
 		self.typicalPrice = self.info[1]
+		print(self.SMA,self.typicalPrice)
 		self.bollinger = [[]]
 		self.deviationNum = [[]]
 		self.loopStock()
@@ -42,14 +43,17 @@ class Bollinger():
 		sum = 0 
 		for x in range(0, len(self.typicalPrice[self.temp]),1):
 			sum += self.typicalPrice[self.temp][x]
-		self.deviationNum = ((sum/len(self.typicalPrice[self.temp][x])) ** 0.5)*2
+		self.deviationNum = ((sum/len(self.typicalPrice[self.temp])) ** 0.5)*2
+		print(self.deviationNum)
 	def calc(self):
 		upper = []
 		lower = []
 		for x in range(0,len(self.typicalPrice[self.temp]),1):
-			upper.append((int(self.SMA[self.temp][x])*int(self.typicalPrice[self.temp][x]))+int(self.deviationNum))
-			lower.append((int(self.SMA[self.temp][x])*int(self.typicalPrice[self.temp][x]))-int(self.deviationNum))
-		for i in range(0,len(upper),1):
-			self.bollinger.append(upper[i]-lower[i])
+			upper.append(((self.SMA[self.temp][x]))+(self.deviationNum))
+			lower.append(((self.SMA[self.temp][x]))-(self.deviationNum))
+		print(upper)
+		print(lower)
+		#for i in range(0,len(upper),1):
+			#self.bollinger.append(upper[i]-lower[i])
 Bollinger()
 
