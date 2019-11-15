@@ -26,7 +26,10 @@ def getprice(x):
 	tr_elements = doc.xpath('//tbody')
 	
 	# Returns the current price
-	return (float(tr_elements[0][0][4].text_content()))
+	try:
+		return (float(tr_elements[0][0][4].text_content()))
+	except IndexError:
+		return float(tr_elements[0][1][4].text_content())
 
 
 # Function that writes the new current balance in balancs.csv
