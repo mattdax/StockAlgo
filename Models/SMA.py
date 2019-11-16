@@ -7,15 +7,18 @@ sys.path.insert(0, parent_dir)
 from Scrapers import CurrentPriceScraper as CPS
 
 class SMA():
+	
+
 	def __init__(self):
 		self.stocks = ['NVDA']
-		self.period = 5
+		self.period = 50
 		self.tpyicalP = [[]]
 		self.SMA = []
 		self.info = [self.SMA,self.tpyicalP]
 		self.loopPull()
 	
 	# Loops which stock data is currently being pulled from 
+	
 	def loopPull(self):
 		for i in range(0, len(self.stocks),1):
 			self.temp = self.stocks[i]
@@ -33,20 +36,25 @@ class SMA():
 		self.tr_elements = doc.xpath('//tbody')
 		
 		
-		self.tempTwo = [[]]
+		self.tempTwo = []
 		self.i = 0
 		for i in range(0, self.period, 1):
 			sum = 0
-
+			self.tempthree = []
 			for x in range(self.i, (self.period+self.i), 1):
-				self.tempthree = []
+				
 				try:
 					self.tempthree.append(self.tr_elements[0][x][4].text_content())
-					self.tempTwo.append(self.tempthree)
+					
 				except IndexError:
-					self.tempTwo.append[i](self.tr_elements[0][x+1][4].text_content())
-					self.i += 1 
-				self.i += 1
+					try:
+						self.tempthree.append(self.tr_elements[0][x+1][4].text_content())
+					except IndexError:
+						self.tempthree.append(self.tr_elements[0][x+2][4].text_content())
+						#self.i += 1 
+						pass
+			self.tempTwo.append(self.tempthree)
+			self.i += 1
 
 				
 		self.calc()
@@ -54,31 +62,37 @@ class SMA():
 	def calc(self):
 		
 		SMAt = []
-		print(self.tempTwo)
-		print()
-		for i in range(0, (self.period),1):
-			sum = 0
 		
-			for z in range(0, len(self.tempTwo),1):
+		for i in range(0, self.period,1):
+			sum = 0
+			for z in range(0, len(self.tempTwo[i]),1):
 				sum+= float(self.tempTwo[i][z])
+			
 			SMAt.append(float(sum)/(float(self.period)))
 		self.SMA.append(SMAt)
-		
 	def tPrice(self):
 		self.i = 0
 		for i in range(0, self.period,1):
 			try:
-				high = float(self.tr_elements[0][i][1].text_content())
-				low = float(self.tr_elements[0][i][2].text_content())
+				
+				high = float(self.tr_elements[0][i][2].text_content())
+				low = float(self.tr_elements[0][i][3].text_content())
+				cprice = float(self.tr_elements[0][i][4].text_content())
+				#print(high,low,cprice)
 			except ValueError:
-				high = float(self.tr_elements[0][i+1][1].text_content())
-				low = float(self.tr_elements[0][i+1][2].text_content())
+				high = float(self.tr_elements[0][i+1][2].text_content())
+				low = float(self.tr_elements[0][i+1][3].text_content())
+				cprice = float(self.tr_elements[0][i+1][4].text_content())
 				self.i += 1 
 			except IndexError:
-				print(self.i+1)
-				high = float(self.tr_elements[0][self.i+1][1].text_content())
-				low = float(self.tr_elements[0][self.i+1][2].text_content())
+				high = float(self.tr_elements[0][i+1][2].text_content())
+				low = float(self.tr_elements[0][i+1][3].text_content())
+				cprice = float(self.tr_elements[0][i+1][4].text_content())
 				self.i += 1 
-			cprice = float(CPS.getprice(self.stocks[self.numTemp]))
-			self.tpyicalP[self.numTemp].append((float(high+low+cprice)/float(3)))
+			print(high,low,cprice)
+			a = high + low + cprice 
+			a = int(a)
+			a = a/3
+			print(a)
+			self.tpyicalP[self.numTemp].append(a)
 			
