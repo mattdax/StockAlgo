@@ -1,13 +1,9 @@
 import SMA
 # Import Statements
-import SMA
+
 import requests
 import lxml.html as lh
 import sys, os, inspect
-current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parent_dir = os.path.dirname(current_dir)
-sys.path.insert(0, parent_dir) 
-from Scrapers import CurrentPriceScraper as CPS
 
 
 class Bollinger():
@@ -19,7 +15,7 @@ class Bollinger():
 		self.SMA = self.info[0]
 		
 		self.typicalPrice = self.info[1]
-		print(self.typicalPrice)
+		#print(self.typicalPrice)
 		self.bollinger = []
 		self.deviationNum = [[]]
 		self.loopStock()
@@ -45,13 +41,13 @@ class Bollinger():
 	def deviation(self):
 		
 		sum = 0
-		
+
 		for x in range(0,len(self.typicalPrice[self.temp]),1):
 			sum += self.typicalPrice[self.temp][x]
 		sum = (sum/len(self.typicalPrice[self.temp]))
 		
 		for x in range(0, len(self.typicalPrice[self.temp]),1):
-			self.typicalPrice[self.temp][x] = (self.typicalPrice[self.temp][x]) - (sum)
+			self.typicalPrice[self.temp][x] = self.typicalPrice[self.temp][x] - sum
 		
 		for x in range(0, len(self.typicalPrice[self.temp]),1):
 			self.typicalPrice[self.temp][x] = self.typicalPrice[self.temp][x] ** 2
@@ -68,8 +64,7 @@ class Bollinger():
 		self.lower = []
 		#print(self.SMA)
 		
-		for x in range(0,len(self.typicalPrice[self.temp]),1):
-			print(self.SMA[self.temp][x])
+		for x in range(0,len(self.SMA[self.temp]),1):
 			self.upper.append(((self.SMA[self.temp][x]))+(self.deviationNum))
 			self.lower.append(((self.SMA[self.temp][x]))-(self.deviationNum))
 		self.filter()
