@@ -4,83 +4,65 @@ import SMA
 import requests
 import lxml.html as lh
 import sys, os, inspect
+from alpha_vantage.techindicators import TechIndicators
+import pandas
 
 
 class Bollinger():
 	def __init__(self):
-		self.stocks =['GE']
-		
-		# Gives the calculated list from SMA.py
-		self.info = SMA.SMA().info
-		self.SMA = self.info[0]
-		
-		self.typicalPrice = self.info[1]
-		#print(self.typicalPrice)
-		self.bollinger = []
+		self.stocks =['TSLA','GE']
 		self.deviationNum = [[]]
 		self.loopStock()
 		
+	
+
 	def loopStock(self):
-		
+		self.upper = []
+		self.middle = []
+		self.lower = []
+		self.bollinger = []
+		self.averages = []
+		self.streak = []
 		for i in range(0, len(self.stocks),1):
-			#self.temp = self.stocks[i]
-
+	
 			self.temp = i 
-			#self.newSMA()
-			self.deviation()
+			self.pull()
 			self.calc()
-		print(self.upper)
-		print(self.lower)
-		print(self.SMA)
+			self.filter()
+		print(self.streak)
+	def pull(self):
 		
-		print(self.bollinger)
-		#	print(self.typicalPrice)
-		
+		ti = TechIndicators(key='IYH3P1ZXYWIFM33F',output_format='pandas')
+		data, meta_data = ti.get_bbands(symbol=self.stocks[self.temp], interval='60min',time_period=5)
 
-
-	def deviation(self):
-		
-		sum = 0
-
-		for x in range(0,len(self.typicalPrice[self.temp]),1):
-			sum += self.typicalPrice[self.temp][x]
-		sum = (sum/len(self.typicalPrice[self.temp]))
-		
-		for x in range(0, len(self.typicalPrice[self.temp]),1):
-			self.typicalPrice[self.temp][x] = self.typicalPrice[self.temp][x] - sum
-		
-		for x in range(0, len(self.typicalPrice[self.temp]),1):
-			self.typicalPrice[self.temp][x] = self.typicalPrice[self.temp][x] ** 2
-		sum = 0 
-		
-		for x in range(0, len(self.typicalPrice[self.temp]),1):
-			sum += self.typicalPrice[self.temp][x]
-		
-		self.deviationNum = ((sum/len(self.typicalPrice[self.temp])) ** 0.5)*2
+		self.upper.append(data['Real Upper Band'].tolist())
+		self.middle.append(data['Real Middle Band'].tolist())
+		self.lower.append(data['Real Lower Band'].tolist())
 	
 
 	def calc(self):
-		self.upper = []
-		self.lower = []
-		#print(self.SMA)
-		
-		for x in range(0,len(self.SMA[self.temp]),1):
-			self.upper.append(((self.SMA[self.temp][x]))+(self.deviationNum))
-			self.lower.append(((self.SMA[self.temp][x]))-(self.deviationNum))
-		self.filter()
-
-
-		#for i in range(0,len(self.upper),1):
+		bollTemp = []
+		for i in range(0, len(self.upper[self.temp]),1):
+			bollTemp.append((self.upper[self.temp][i])-(self.lower[self.temp][i]))
+		self.bollinger.append(bollTemp)
 	
-		#	self.bollinger.append(self.upper[i]-self.lower[i])
 	def filter(self):
-		
-		for x in range(0,len(self.upper),1):
-				
-			temp = []
-			
-			temp.append(self.upper[x]-self.lower[x])
-			self.bollinger.append(temp)
-		
-Bollinger()
+		self.sum = 0
+		strk = 0
+		end = 0
+		print('here')
+		for i in range(0, len(self.bollinger[self.temp])-1,1):
+			if end == 3:
+				break
 
+			if self.bollinger[self.temp][i] <= self.bollinger[self.temp][i+1]:
+				strk += 1 
+			else: 
+				try:
+					if self.bollinger[self.temp][i] > self.bollinger[self.temp][i-1]:
+						end += 1
+				except IndexError:
+					pass
+		self.streak.append(strk)
+
+Bollinger()
