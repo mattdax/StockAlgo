@@ -1,4 +1,4 @@
-import SMA
+
 # Import Statements
 
 import requests

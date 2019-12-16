@@ -46,7 +46,7 @@ def writeBalance(x):
 		nbalance = (next(z))[0]
 	
 	# Adds balance to new balalnce
-	newbalance = int(nbalance) + int(x)
+	newbalance = int(x)
 	
 	print(newbalance)
 	
