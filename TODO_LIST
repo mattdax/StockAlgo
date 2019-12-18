@@ -1,0 +1,4 @@
+Build handler
+	- Runs through different indicators
+	- Stores data from these indicators
+	- Compares data

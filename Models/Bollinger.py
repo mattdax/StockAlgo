@@ -7,10 +7,24 @@ import sys, os, inspect
 from alpha_vantage.techindicators import TechIndicators
 import pandas
 
+# Changes path to parent directory
+
+######################
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+par_dir = os.path.dirname(current_dir)
+sys.path.insert(0, par_dir)
+#########################
+
+import handler 
+from Scrapers import TrendingScraper as TS
+# Changes back to original folder
+sys.path.insert(1, '/StockAlgo/Models')
+#################
+
 
 class Bollinger():
 	def __init__(self):
-		self.stocks =['TSLA','GE']
+		self.stocks = TS.RiseScraper().symbols
 		self.deviationNum = [[]]
 		self.loopStock()
 		

@@ -16,6 +16,8 @@ parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir) 
 import balance
 
+
+
 """
 CLASS PURPOSE:
 
@@ -55,7 +57,7 @@ class RiseScraper():
 				col.append((name))
 			self.symbols.append(col[0])
 			col=[]
-
+			print(i)
 		# Loop that stores price in a list
 		for i in range(1, len(self.tr_elements),1):
 			for	t in self.tr_elements[i]:
@@ -64,7 +66,7 @@ class RiseScraper():
 								# '2' = price
 			self.price.append(col[2])
 			col=[]
-		
+			print(i)
 
 		self.ctr = 2
 		# Converts dats in lists to float
