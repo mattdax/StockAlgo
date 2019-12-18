@@ -33,7 +33,7 @@ class RiseScraper():
 		#Handle Page? handles contents of website?
 		page = requests.get(url)
 		self.spLimit = balance.Balance().balance
-		print(self.spLimit)
+
 		
 		# Store contents of website under doc
 		doc = lh.fromstring(page.content)
@@ -57,7 +57,8 @@ class RiseScraper():
 				col.append((name))
 			self.symbols.append(col[0])
 			col=[]
-			print(i)
+
+
 		# Loop that stores price in a list
 		for i in range(1, len(self.tr_elements),1):
 			for	t in self.tr_elements[i]:
@@ -66,7 +67,6 @@ class RiseScraper():
 								# '2' = price
 			self.price.append(col[2])
 			col=[]
-			print(i)
 
 		self.ctr = 2
 		# Converts dats in lists to float

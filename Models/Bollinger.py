@@ -15,7 +15,7 @@ par_dir = os.path.dirname(current_dir)
 sys.path.insert(0, par_dir)
 #########################
 
-import handler 
+#import handler 
 from Scrapers import TrendingScraper as TS
 # Changes back to original folder
 sys.path.insert(1, '/StockAlgo/Models')
@@ -24,33 +24,55 @@ sys.path.insert(1, '/StockAlgo/Models')
 
 class Bollinger():
 	def __init__(self):
+		
+		# Loads Gainer list
 		self.stocks = TS.RiseScraper().symbols
-		self.deviationNum = [[]]
+		
+		# Cuts off top 30 - Due to Alpha Vantage limit
+		self.stocks = self.stocks[0:29]
+		
+		# Loop Call
 		self.loopStock()
 		
+		print(self.bollinger)
+		print(self.streak)
 	
 
 	def loopStock(self):
+		
+		# Define Variables
 		self.upper = []
 		self.middle = []
 		self.lower = []
 		self.bollinger = []
 		self.averages = []
 		self.streak = []
+
+		# Loop for length of stocks
 		for i in range(0, len(self.stocks),1):
-	
+			# FIGURE OUT WHAT THIS DOES
 			self.temp = i 
 			self.pull()
 			self.calc()
 			self.filter()
-		print(self.streak)
+		#print(self.streak)
 	def pull(self):
+		# 	Load Indicator
+		ti = TechIndicators(key='XP9KDY0X1E13B4HN',output_format='pandas')
 		
-		ti = TechIndicators(key='IYH3P1ZXYWIFM33F',output_format='pandas')
-		data, meta_data = ti.get_bbands(symbol=self.stocks[self.temp], interval='60min',time_period=5)
+		# 	Pulls Bollinger Bands  -	symbol = current symbol, interval = Time between data points, time_period = number of data points
+		data, meta_data = ti.get_bbands(symbol= self.stocks[self.temp], interval='60min',time_period= 5)
 
-		self.upper.append(data['Real Upper Band'].tolist())
+		print(data)
+		
+		
+		# Not used atm
+		#################
 		self.middle.append(data['Real Middle Band'].tolist())
+		##################
+
+		# Appends data points of current stock to 
+		self.upper.append(data['Real Upper Band'].tolist())
 		self.lower.append(data['Real Lower Band'].tolist())
 	
 
@@ -64,9 +86,9 @@ class Bollinger():
 		self.sum = 0
 		strk = 0
 		end = 0
-		print('here')
+
 		for i in range(0, len(self.bollinger[self.temp])-1,1):
-			if end == 3:
+			if end == 2:
 				break
 
 			if self.bollinger[self.temp][i] <= self.bollinger[self.temp][i+1]:
