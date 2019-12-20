@@ -29,13 +29,12 @@ class Bollinger():
 		self.stocks = TS.RiseScraper().symbols
 		
 		# Cuts off top 30 - Due to Alpha Vantage limit
+		
 		self.stocks = self.stocks[0:29]
 		
 		# Loop Call
 		self.loopStock()
 		
-		print(self.bollinger)
-		print(self.streak)
 	
 
 	def loopStock(self):
@@ -60,11 +59,9 @@ class Bollinger():
 		# 	Load Indicator
 		ti = TechIndicators(key='XP9KDY0X1E13B4HN',output_format='pandas')
 		
+	
 		# 	Pulls Bollinger Bands  -	symbol = current symbol, interval = Time between data points, time_period = number of data points
 		data, meta_data = ti.get_bbands(symbol= self.stocks[self.temp], interval='60min',time_period= 5)
-
-		print(data)
-		
 		
 		# Not used atm
 		#################

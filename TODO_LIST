@@ -1,4 +1,35 @@
-Build handler
-	- Runs through different indicators
-	- Stores data from these indicators
-	- Compares data
+TODO List:
+
+	Build handler
+		- Runs through different indicators
+
+			- Somehow pass the symbols to handler file
+
+		- Stores data from these indicators
+			
+			Bollinger
+			
+			- Data stored from Bollinger bands must be streak
+
+			Williams
+			
+			- Seperate Sell and Buy Vairables
+
+			PriceIncrease
+
+
+		- Compares data
+	
+	Build Price Increase
+
+		- Load Gainers list 
+
+		- See if price has been trending upwards during the hour
+
+
+
+
+What I've done
+	
+	- Commented out Bollinger Bands and understood whats going on
+	- rebuilt TrendingScraper to deal with stocks that cannot be processed by alpha vantage
