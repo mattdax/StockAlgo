@@ -16,7 +16,7 @@ sys.path.insert(0, par_dir)
 #########################
 
 #import handler 
-from Scrapers import TrendingScraper as TS
+#from Scrapers import TrendingScraper as TS
 # Changes back to original folder
 sys.path.insert(1, '/StockAlgo/Models')
 #################
@@ -26,11 +26,11 @@ class Bollinger():
 	def __init__(self):
 		
 		# Loads Gainer list
-		self.stocks = TS.RiseScraper().symbols
+		self.stocks = ['GOOG', 'GE']
 		
 		# Cuts off top 30 - Due to Alpha Vantage limit
 		
-		self.stocks = self.stocks[0:29]
+		#self.stocks = self.stocks[0:29]
 		
 		# Loop Call
 		self.loopStock()
@@ -61,7 +61,7 @@ class Bollinger():
 		
 	
 		# 	Pulls Bollinger Bands  -	symbol = current symbol, interval = Time between data points, time_period = number of data points
-		data, meta_data = ti.get_bbands(symbol= self.stocks[self.temp], interval='60min',time_period= 5)
+		data, meta_data = ti.get_bbands(symbol= self.stocks[self.temp], interval='daily',time_period= 60)
 		
 		# Not used atm
 		#################
@@ -79,6 +79,8 @@ class Bollinger():
 			bollTemp.append((self.upper[self.temp][i])-(self.lower[self.temp][i]))
 		self.bollinger.append(bollTemp)
 	
+	
+
 	def filter(self):
 		self.sum = 0
 		strk = 0

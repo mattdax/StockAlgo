@@ -1,7 +1,7 @@
 TODO List:
 
 	Build handler
-		- Runs through different indicators
+		- Runs through different indicators 
 
 			- Somehow pass the symbols to handler file
 
@@ -26,8 +26,10 @@ TODO List:
 
 		- See if price has been trending upwards during the hour
 
+	Trending Price Scraper:
 
-
+		- write the list to csv file
+			- will prevent from having to call the program multiple times
 
 What I've done
 	

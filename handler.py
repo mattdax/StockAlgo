@@ -1,31 +1,16 @@
-from Scrapers import TrendingScraper as TS
+#from Scrapers import TrendingScraper as TS
 import requests
 import lxml.html as lh
 from Models import Bollinger as Boll
-from Models import WilliamsInd as Will
+#from Models import WilliamsInd as Will
+from Models import change as Change
 import time
 class Handler():
 
 	def __init__(self):
-		self.timec = time.time()
-		#self.symbols = TS.RiseScraper().symbols
-
-		self.prices = []
-		#print(self.symbols)
-		print('2')
-		#self.loopPrice()
-		print(self.prices)
-		self.check(  )
-# Check Stocks amongst indicators
-	
-	# 
-	def check(self):
-		self.boll = Boll.Bollinger().streak
 		
-		print(self.timec - time.time())
-
-
-		self.Will = Will.Williams().williams
-		print(self.boll, self.Will)
+		self.Boll = Boll.Bollinger().streak
+		self.Change = Change.Change().Prices
+		print(self.boll, self.Change)
 
 Handler()

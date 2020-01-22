@@ -2,7 +2,6 @@
 TODO
 
 - Comment
-- figure out why all symbols are not being taken
 """
 
 import os,sys,inspect
