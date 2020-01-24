@@ -4,63 +4,46 @@ import lxml.html as lh
 from Models import Bollinger as Boll
 #from Models import WilliamsInd as Will
 from Models import change as Change
+from alpha_vantage.techindicators import TechIndicators
 import time
 class Handler():
 
 	def __init__(self):
 		
-		self.BollChange = []
-		self.PChange = []
 
-		self.Boll = Boll.Bollinger().bollinger
-		
+		self.stocks = ['GOOG', 'GE']
+		self.days = 60
+		self.Bollinger  = Boll.Bollinger().bollinger
+		self.BollUpper = self.Bollinger[0]
+		self.BollLower = self.Bollinger[1]
+		self.SecondLower = []
+		self.SecondUpper = []
 		self.Change = Change.Change().Prices
 		
-		self.loopConvert()
-		print(self.BollChange,self.PChange)
-	
-	def loopConvert(self):
+		self.loopBollingerTwo()
+		print(self.BollUpper[0][0], self.Change[0][0])
+		self.testFunc()
+	def loopBollingerTwo(self):
 		
-		
-		if len(self.Boll) != len(self.Change):
-			raise TypeError
-
-		for i in range(0, len(self.Boll), 1):
+		for i in range(0, len(self.stocks),1):
 			self.temp = i
-			self.ConvertBollinger()
+			self.pull()
+	def pull(self):
+		ti = TechIndicators(key='XP9KDY0X1E13B4HN',output_format='pandas')	
+	
+		# 	Pulls Bollinger Bands  -	symbol = current symbol, interval = Time between data points, time_period = number of data points
+		data, meta_data = ti.get_bbands(symbol= self.stocks[self.temp], interval='daily',time_period= 20, nbdevup = 1, nbdevdn = 1)
+		
 
-
-	def ConvertBollinger(self):
-		BollChange = []
-		PChange = []
-
-
-		for i in range(1, len(self.Boll[self.temp]),1):
-			
-			BollChange.append(round(((self.Boll[self.temp][i]-self.Boll[self.temp][i-1])/abs(self.Boll[self.temp][i-1])*-100),2))
-			PChange.append(round(((self.Change[self.temp][i]-self.Change[self.temp][i-1])/abs(self.Change[self.temp][i-1])*-100),2))
-		self.BollChange.append(BollChange)
-		self.PChange.append(PChange)
-
-		c = 0
-		for i in range(0, 3, 1):
-			c += PChange[i]
-		print(c/3)
-"""
-
-	- Average Pchange <---- recent and past
-
-		- all 60 days
-		- 30
-		- 7 
-		- 3 
-
-	- If Boll change is pos 
-
-	- Average Boll change <-----
-
-
-"""
-
-
+		# Appends data points of current stock to 
+		self.SecondUpper.append(data['Real Upper Band'].tolist())
+		self.SecondLower.append(data['Real Lower Band'].tolist())
+	def testFunc(self):
+		for i in range(0, len(self.Change[0]),1):
+			if self.Change[0][i] <= self.SecondUpper[1][i] and self.Change[1][i] >= self.SecondLower[1][i]:
+				print("Hold/Nothing")
+			if self.Change[1][i] > self.SecondUpper[1][i]:
+				print("Buy")
+			else:
+				print("Sell")
 Handler()

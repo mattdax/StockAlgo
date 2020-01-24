@@ -28,7 +28,8 @@ class Bollinger():
 		# Loads Gainer list
 		self.stocks = ['GOOG', 'GE']
 		self.days = 60
-		# Cuts off top 30 - Due to Alpha Vantage limit
+		
+			# Cuts off top 30 - Due to Alpha Vantage limit
 		
 		#self.stocks = self.stocks[0:29]
 		
@@ -43,7 +44,7 @@ class Bollinger():
 		self.upper = []
 		self.middle = []
 		self.lower = []
-		self.bollinger = []
+		self.bollinger = [self.upper, self.lower]
 		self.averages = []
 		self.streak = []
 
@@ -52,7 +53,7 @@ class Bollinger():
 			# FIGURE OUT WHAT THIS DOES
 			self.temp = i 
 			self.pull()
-			self.calc()
+			#self.calc()
 			#self.filter() ---------- Removed for now
 			
 
@@ -62,7 +63,7 @@ class Bollinger():
 		
 	
 		# 	Pulls Bollinger Bands  -	symbol = current symbol, interval = Time between data points, time_period = number of data points
-		data, meta_data = ti.get_bbands(symbol= self.stocks[self.temp], interval='daily',time_period= 60)
+		data, meta_data = ti.get_bbands(symbol= self.stocks[self.temp], interval='daily',time_period= 20)
 		
 		# Not used atm
 		#################
@@ -73,36 +74,12 @@ class Bollinger():
 		self.upper.append(data['Real Upper Band'].tolist())
 		self.lower.append(data['Real Lower Band'].tolist())
 	
-
+"""
 	def calc(self):
 		bollTemp = []
 		
 		for i in range(0, len(self.upper[self.temp]),1):
 			bollTemp.append(round((self.upper[self.temp][i])-(self.lower[self.temp][i]),2))
-		bollTemp = bollTemp[:self.days+1]
+		bollTemp = bollTemp[:]
 		self.bollinger.append(bollTemp)
-	
-
-# Removed For now
-
-	"""
-
-	def filter(self):
-		self.sum = 0
-		strk = 0
-		end = 0
-
-		for i in range(0, len(self.bollinger[self.temp])-1,1):
-			if end == 2:
-				break
-
-			if self.bollinger[self.temp][i] <= self.bollinger[self.temp][i+1]:
-				strk += 1 
-			else: 
-				try:
-					if self.bollinger[self.temp][i] > self.bollinger[self.temp][i-1]:
-						end += 1
-				except IndexError:
-					pass
-		self.streak.append(strk)
-"""
+		"""
