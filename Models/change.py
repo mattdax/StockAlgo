@@ -4,7 +4,7 @@ class Change():
 		
 	def __init__(self):
 
-		self.stocks = ['GOOG','GE'] 
+		self.stocks = ['GOOG','TEAM'] 
 		#self.days = 60 
 		self.Prices = []
 		self.loopStocks()
@@ -21,7 +21,7 @@ class Change():
 		#ts = TimeSeries(key='XP9KDY0X1E13B4HN',output_format='pandas')
 		#data , metadata = ts.get_daily(self.stocks[self.temp])
 		ts = TimeSeries(key='XP9KDY0X1E13B4HN', output_format='pandas')
-		data, meta_data = ts.get_daily(symbol=self.stocks[self.temp])
+		data, meta_data = ts.get_daily(symbol=self.stocks[self.temp],  outputsize='full')
 		data = data['4. close'].tolist()
 		data = data
 		self.Prices.append(data)

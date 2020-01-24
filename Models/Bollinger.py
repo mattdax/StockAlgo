@@ -26,7 +26,7 @@ class Bollinger():
 	def __init__(self):
 		
 		# Loads Gainer list
-		self.stocks = ['GOOG', 'GE']
+		self.stocks = ['GOOG', 'TEAM']
 		self.days = 60
 		
 			# Cuts off top 30 - Due to Alpha Vantage limit
