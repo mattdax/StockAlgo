@@ -9,7 +9,7 @@ from Scrapers import TrendingScraper as TS
 #import TrendingScraper as TS
 import requests
 import lxml.html as lh
-
+import handler
 class StockAPI():
 	def __init__(self):
 		
@@ -21,7 +21,6 @@ class StockAPI():
 		self.Wlow = []
 		self.daysBack = 14
 		self.symbols = TS.RiseScraper().symbols
-		
 		self.loopPull()
 		self.info = [self.Cprice, self.WHT, self.WLT, self.symbols]
 	
