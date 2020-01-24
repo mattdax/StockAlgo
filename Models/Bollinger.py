@@ -27,7 +27,7 @@ class Bollinger():
 		
 		# Loads Gainer list
 		self.stocks = ['GOOG', 'GE']
-		
+		self.days = 60
 		# Cuts off top 30 - Due to Alpha Vantage limit
 		
 		#self.stocks = self.stocks[0:29]
@@ -53,8 +53,9 @@ class Bollinger():
 			self.temp = i 
 			self.pull()
 			self.calc()
-			self.filter()
-		#print(self.streak)
+			#self.filter() ---------- Removed for now
+			
+
 	def pull(self):
 		# 	Load Indicator
 		ti = TechIndicators(key='XP9KDY0X1E13B4HN',output_format='pandas')
@@ -75,11 +76,16 @@ class Bollinger():
 
 	def calc(self):
 		bollTemp = []
+		
 		for i in range(0, len(self.upper[self.temp]),1):
-			bollTemp.append((self.upper[self.temp][i])-(self.lower[self.temp][i]))
+			bollTemp.append(round((self.upper[self.temp][i])-(self.lower[self.temp][i]),2))
+		bollTemp = bollTemp[:self.days+1]
 		self.bollinger.append(bollTemp)
 	
-	
+
+# Removed For now
+
+	"""
 
 	def filter(self):
 		self.sum = 0
@@ -99,5 +105,4 @@ class Bollinger():
 				except IndexError:
 					pass
 		self.streak.append(strk)
-
-Bollinger()
+"""
