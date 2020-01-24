@@ -52,12 +52,13 @@ class Handler():
 			print(len(self.Change[self.temp]),len(self.SecondUpper[self.temp]))
 	def Analyze(self):
 			print(len(self.Change[self.temp]),len(self.SecondUpper[self.temp]))
-			for i in range(len(self.SecondUpper[self.temp])-1,0,-1):
+			for i in range(len(self.SecondUpper[self.temp])-2,0,-1):
 				
 				if self.Change[self.temp][i] <= self.SecondUpper[self.temp][i] and self.Change[self.temp][i] >= self.SecondLower[self.temp][i]:
 					pass
 				if self.Change[self.temp][i] > self.SecondUpper[self.temp][i]:
-					if self.stocksOwn < 4:
+					
+					if self.stocksOwn < 4 and self.Change[self.temp][i+1] > self.SecondUpper[self.temp][i+1]:
 						self.trades += 1
 						self.stocksOwn += 1
 						self.balance -= self.Change[self.temp][i]
