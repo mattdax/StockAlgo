@@ -9,32 +9,35 @@ import time
 class Handler():
 
 	def __init__(self):
-		
-		self.balance = 0
-		self.stocksOwn = 0
+		self.balanceInit = 10000
+		self.balance = 10000
+		self.stocksOwned = 0
 		self.trades = 0
-		self.stocks = ['GOOG', 'TEAM']
-		self.recommend = []
+		self.stocks = ['GE', 'SLF']
 		self.days = 60
-		self.Bollinger  = Boll.Bollinger().bollinger
-		self.BollUpper = self.Bollinger[0]
-		self.BollLower = self.Bollinger[1]
 		self.SecondLower = []
 		self.SecondUpper = []
+		self.position = []
 		self.Change = Change.Change().Prices
-		self.loopBollingerTwo()
-		self.testFunc()
-		print(self.balance)
-		print(self.stocksOwn)
-		print(self.trades)
-
-		#self.Analyze()
-	def loopBollingerTwo(self):
 		
+
+		self.loopBollingerTwo()
+		self.loopBacktrack()
+		
+
+		print(self.balance)
+
+		print(self.trades)
+		print(self.position)
+
+	def loopBollingerTwo(self):
 		for i in range(0, len(self.stocks),1):
 			self.temp = i
 			self.pull()
+
+
 	def pull(self):
+		
 		ti = TechIndicators(key='XP9KDY0X1E13B4HN',output_format='pandas')	
 	
 		# 	Pulls Bollinger Bands  -	symbol = current symbol, interval = Time between data points, time_period = number of data points
@@ -45,29 +48,54 @@ class Handler():
 		self.SecondLower.append(data['Real Lower Band'].tolist())
 
 
-	def testFunc(self):
-		#for i in range(0, len(self.stocks),1):
-			self.temp = 1
+	def loopBacktrack(self):
+		for i in range(0, len(self.stocks),1):
+			self.temp = i
 			self.Analyze()
-			print(len(self.Change[self.temp]),len(self.SecondUpper[self.temp]))
+	
 	def Analyze(self):
-			print(len(self.Change[self.temp]),len(self.SecondUpper[self.temp]))
-			for i in range(len(self.SecondUpper[self.temp])-2,0,-1):
-				
+			self.sold = True
+			self.balTemp = self.balance * 0.20
+			self.SellStrk = 0
+			self.BuyStrk = 0
+			self.balance = 10000
+			self.stocksOwned = 0
+
+			for i in range(len(self.Change[self.temp])-1,0,-1):
+
+				# Hold 
 				if self.Change[self.temp][i] <= self.SecondUpper[self.temp][i] and self.Change[self.temp][i] >= self.SecondLower[self.temp][i]:
 					pass
+
 				if self.Change[self.temp][i] > self.SecondUpper[self.temp][i]:
-					
-					if self.stocksOwn < 4 and self.Change[self.temp][i+1] > self.SecondUpper[self.temp][i+1]:
+					self.BuyStrk += 1
+					#if self.stocksOwn < 4 and self.Change[self.temp][i+1] > self.SecondUpper[self.temp][i+1]:
+					if self.sold == True or self.BuyStrk == 2:
+						self.BuyStrk = 0
+						self.sold = False
 						self.trades += 1
-						self.stocksOwn += 1
-						self.balance -= self.Change[self.temp][i]
+						
+
+						self.stocksOwned += (self.balTemp//self.Change[self.temp][i])
+						
+						self.balance -= (self.Change[self.temp][i]) * (self.balTemp//self.Change[self.temp][i])
 				else:
-					if self.stocksOwn > 0:
+					if SellStrk == 1:
+						self.SellStrk += 1
+					if self.stocksOwned > 0 and self.SellStrk == 2:
+						self.SellStrk = 0
 						self.trades += 1
-						self.stocksOwn -= 1
-						self.balance += self.Change[self.temp][i]
+						self.stocksOwned -= self.stocksOwned
+						self.balance += (self.Change[self.temp][i]) * (self.balTemp//self.Change[self.temp][i])
+						self.sold = True
 
+			self.balanceNew = self.balance + self.stocksOwned * self.Change[self.temp][0]
+			print("Final Balance: "+ str(self.balanceNew))
+			print("Trades Made: " + str(self.trades))
 
-
-Handler()
+			if self.balanceNew > self.balanceInit:
+				self.position.append(round(self.balanceNew/self.balanceInit,3))
+			else:
+				self.position.append(0)
+			
+Handler()	
