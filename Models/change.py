@@ -1,10 +1,17 @@
 from alpha_vantage.timeseries import TimeSeries
+import sys, inspect, os
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+par_dir = os.path.dirname(current_dir)
+sys.path.insert(0, par_dir)
+
+from Data import Config
+
 
 class Change():
 		
 	def __init__(self):
-
-		self.stocks = ['GE','SLF'] 
+		self.Config = Config.Config().Config
+		self.stocks = self.Config[0]
 		#self.days = 60 
 		self.Prices = []
 		self.loopStocks()

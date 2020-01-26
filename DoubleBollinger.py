@@ -2,19 +2,24 @@
 import requests
 import lxml.html as lh
 from Models import Bollinger as Boll
-#from Models import WilliamsInd as Will
+
+from Data import Config
+
 from Models import change as Change
 from alpha_vantage.techindicators import TechIndicators
 import time
-class Handler():
+class DoubleBollingerBacktrack():
 
 	def __init__(self):
-		self.balanceInit = 10000
-		self.balance = 10000
+		self.Config = Config.Config().Config
+		self.DoubleBollinger = Config.Config().DoubleBollinger
+
+		self.balanceInit = self.Config[2]
+		self.balance = self.Config[2]
 		self.stocksOwned = 0
 		self.trades = 0
-		self.stocks = ['GE', 'SLF']
-		self.days = 60
+		self.stocks = self.Config[0]
+		self.days = self.Config[1]
 		self.SecondLower = []
 		self.SecondUpper = []
 		self.position = []
@@ -25,9 +30,6 @@ class Handler():
 		self.loopBacktrack()
 		
 
-		print(self.balance)
-
-		print(self.trades)
 		print(self.position)
 
 	def loopBollingerTwo(self):
@@ -54,11 +56,12 @@ class Handler():
 			self.Analyze()
 	
 	def Analyze(self):
+			
 			self.sold = True
-			self.balTemp = self.balance * 0.20
+			self.balTemp = self.balance * self.DoubleBollinger[0]
 			self.SellStrk = 0
 			self.BuyStrk = 0
-			self.balance = 10000
+			self.balance = self.Config[2]
 			self.stocksOwned = 0
 
 			for i in range(len(self.Change[self.temp])-1,0,-1):
@@ -70,7 +73,7 @@ class Handler():
 				if self.Change[self.temp][i] > self.SecondUpper[self.temp][i]:
 					self.BuyStrk += 1
 					#if self.stocksOwn < 4 and self.Change[self.temp][i+1] > self.SecondUpper[self.temp][i+1]:
-					if self.sold == True or self.BuyStrk == 2:
+					if self.sold == True or self.BuyStrk == self.DoubleBollinger[1]:
 						self.BuyStrk = 0
 						self.sold = False
 						self.trades += 1
@@ -80,16 +83,16 @@ class Handler():
 						
 						self.balance -= (self.Change[self.temp][i]) * (self.balTemp//self.Change[self.temp][i])
 				else:
-					if SellStrk == 1:
-						self.SellStrk += 1
-					if self.stocksOwned > 0 and self.SellStrk == 2:
+					self.SellStrk += 1
+					#if self.stocksOwned > 0 and self.SellStrk == 2:
+					if self.stocksOwned > 0 and self.SellStrk == self.DoubleBollinger[2]:
 						self.SellStrk = 0
 						self.trades += 1
 						self.stocksOwned -= self.stocksOwned
 						self.balance += (self.Change[self.temp][i]) * (self.balTemp//self.Change[self.temp][i])
 						self.sold = True
-
 			self.balanceNew = self.balance + self.stocksOwned * self.Change[self.temp][0]
+			
 			print("Final Balance: "+ str(self.balanceNew))
 			print("Trades Made: " + str(self.trades))
 
@@ -98,4 +101,4 @@ class Handler():
 			else:
 				self.position.append(0)
 			
-Handler()	
+DoubleBollingerBacktrack()	
