@@ -10,9 +10,9 @@ from alpha_vantage.techindicators import TechIndicators
 import time
 class DoubleBollingerBacktrack():
 
-	def __init__(self):
+	def __init__(self, config):
 		self.Config = Config.Config().Config
-		self.DoubleBollinger = Config.Config().DoubleBollinger
+		self.DoubleBollinger = config
 
 		self.balanceInit = self.Config[2]
 		self.balance = self.Config[2]
@@ -25,13 +25,14 @@ class DoubleBollingerBacktrack():
 		self.position = []
 		self.Change = Change.Change().Prices
 		
-
+		print("Here 1")
 		self.loopBollingerTwo()
 		self.loopBacktrack()
 		
 
 		print(self.position)
-
+	def __repr__(self):
+		return str(self.position[0])
 	def loopBollingerTwo(self):
 		for i in range(0, len(self.stocks),1):
 			self.temp = i
@@ -100,5 +101,38 @@ class DoubleBollingerBacktrack():
 				self.position.append(round(self.balanceNew/self.balanceInit,3))
 			else:
 				self.position.append(0)
-			
-DoubleBollingerBacktrack()	
+
+class DoubleBollingerOptimize():
+	def __init__(self):
+		self.Config = Config.Config().Config
+		self.DoubleBollinger = Config.Config().DoubleBollinger
+		self.DoubleBollingerPrecentToInvest = 0.1	
+		self.BuyStreak = 2				
+		self.SellStreak  = 2
+		#self.InitialPosition = float(DoubleBollingerBacktrack())
+		self.AllResults = []
+		#self.pack = [self.DoubleBollingerPrecentToInvest, self.BuyStreak, self.SellStreak]
+
+		#self.AllResults.append(self.InitialPosition)
+		self.Optimize()
+	def Optimize(self):
+		for i in range(0,5,1):
+			for x in range(0,3,1):
+				self.SellStreak = 2
+				for z in range(0,3,1):
+					if self.SellStreak > 5:
+						break
+					time.sleep(5)
+					self.SellStreak += 1
+					self.pack = [self.DoubleBollingerPrecentToInvest, self.BuyStreak, self.SellStreak]
+					print(self.pack)
+					temp = DoubleBollingerBacktrack(self.pack)
+					
+					self.AllResults.append(temp)
+				
+				self.BuyStreak += 1
+			self.BuyStreak = 2
+			self.DoubleBollingerPrecentToInvest += 0.1
+		print(self.AllResults)
+
+DoubleBollingerOptimize()	

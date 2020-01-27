@@ -27,6 +27,7 @@ class Change():
 	def pull (self):
 		#ts = TimeSeries(key='XP9KDY0X1E13B4HN',output_format='pandas')
 		#data , metadata = ts.get_daily(self.stocks[self.temp])
+		
 		ts = TimeSeries(key='XP9KDY0X1E13B4HN', output_format='pandas')
 		data, meta_data = ts.get_daily(symbol=self.stocks[self.temp],  outputsize='compact')
 		data = data['4. close'].tolist()
